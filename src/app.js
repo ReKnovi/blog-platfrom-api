@@ -4,6 +4,7 @@ const blogRoutes = require('./routes/blogRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const authRoutes = require('./routes/authRoutes');
 const errorHandler = require('./middlewares/errorHandler');
+const rssRoutes = require('./routes/rssRoutes');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -32,6 +33,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/blogs', blogRoutes);
 app.use('/api/v1/comments', commentRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/rss', rssRoutes);
 
 app.use(errorHandler);
 
