@@ -1,24 +1,26 @@
 const Blog = require('../models/Blog');
+const { sendErrorResponse } = require('../utils/responseHelper');
 
 module.exports = async (req, res, next) => {
   try {
-    // Check if user is authenticated and has required properties
     if (!req.user || !req.user._id) {
-      return res.status(401).json({ message: 'Authentication required' });
+      return sendErrorResponse(res, 401, 'Authentication required');
     }
 
     const blog = await Blog.findById(req.params.id);
-    if (!blog) return res.status(404).json({ message: 'Blog not found' });
+    if (!blog) {
+      return sendErrorResponse(res, 404, 'Blog not found');
+    }
 
     if (!blog.user) {
-      return res.status(500).json({ message: 'Blog has no associated user' });
+      return sendErrorResponse(res, 500, 'Blog has no associated user');
     }
 
     const isOwner = blog.user.toString() === req.user._id.toString();
     const isAdmin = req.user.role === 'admin';
 
     if (!isOwner && !isAdmin) {
-      return res.status(403).json({ message: 'Forbidden: Not allowed' });
+      return sendErrorResponse(res, 403, 'Access denied. You can only modify your own blogs');
     }
 
     next();

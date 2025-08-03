@@ -8,10 +8,10 @@ exports.getRSSFeed = async (req, res, next) => {
       author, 
       limit = 20, 
       tags,
-      since // ISO date string for incremental feeds
+      since
     } = req.query;
 
-    // Build dynamic filter
+    
     const filter = {};
     
     if (category) {
@@ -31,7 +31,6 @@ exports.getRSSFeed = async (req, res, next) => {
       filter.createdAt = { $gte: new Date(since) };
     }
 
-    // Validate and limit the number of items
     const itemLimit = Math.min(parseInt(limit) || 20, 100);
 
     const feed = new RSS({
@@ -76,7 +75,6 @@ exports.getRSSFeed = async (req, res, next) => {
     }
 
     blogs.forEach(blog => {
-      // Truncate description for RSS (recommended max 400 chars)
       const description = blog.description.length > 400 
         ? blog.description.substring(0, 397) + '...' 
         : blog.description;
@@ -85,7 +83,7 @@ exports.getRSSFeed = async (req, res, next) => {
         title: blog.title,
         description: description,
         url: `${process.env.BASE_URL}/blogs/${blog._id}`,
-        guid: `${process.env.BASE_URL}/blogs/${blog._id}`, // Unique identifier
+        guid: `${process.env.BASE_URL}/blogs/${blog._id}`,
         author: blog.user?.email || 'noreply@blogplatform.com',
         date: blog.createdAt,
         categories: blog.tags || [],
@@ -105,7 +103,6 @@ exports.getRSSFeed = async (req, res, next) => {
 
     const xml = feed.xml({ indent: true });
     
-    // Set appropriate headers
     res.set({
       'Content-Type': 'application/rss+xml; charset=UTF-8',
       'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
@@ -118,20 +115,14 @@ exports.getRSSFeed = async (req, res, next) => {
     next(err);
   }
 };
-
-// Category-specific RSS feeds
 exports.getCategoryRSSFeed = async (req, res, next) => {
   req.query.category = req.params.category;
   return exports.getRSSFeed(req, res, next);
 };
-
-// Author-specific RSS feeds
 exports.getAuthorRSSFeed = async (req, res, next) => {
   req.query.author = req.params.authorId;
   return exports.getRSSFeed(req, res, next);
 };
-
-// Tag-specific RSS feeds
 exports.getTagRSSFeed = async (req, res, next) => {
   req.query.tags = req.params.tag;
   return exports.getRSSFeed(req, res, next);

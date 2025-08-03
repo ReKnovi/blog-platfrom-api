@@ -5,7 +5,7 @@ class UserFactory {
     return {
       name: faker.person.fullName(),
       email: faker.internet.email().toLowerCase(),
-      password: 'password123', // Will be hashed by pre-save middleware
+      password: 'password123',
       role: 'user',
       ...overrides
     };

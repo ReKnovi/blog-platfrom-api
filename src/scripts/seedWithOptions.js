@@ -56,6 +56,5 @@ const seedData = async (size = 'medium') => {
   }
 };
 
-// Get size from command line argument or environment
 const size = process.argv[2] || process.env.SEED_SIZE || 'medium';
 seedData(size);

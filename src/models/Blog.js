@@ -23,7 +23,7 @@ const blogSchema = new mongoose.Schema({
     type: [String],
     validate: {
       validator: function(v) {
-        return v.length <= 10; // Max 10 tags
+        return v.length <= 10;
       },
       message: 'Cannot have more than 10 tags'
     },

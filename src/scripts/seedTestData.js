@@ -20,7 +20,7 @@ const seedData = async () => {
     // Create users using factory
     console.log('👥 Creating users...');
     const adminUser = UserFactory.createAdmin();
-    const regularUsers = UserFactory.createMany(15); // Create 15 users
+    const regularUsers = UserFactory.createMany(15);
     
     const allUsers = [adminUser, ...regularUsers];
     const createdUsers = await User.insertMany(allUsers);
@@ -28,7 +28,7 @@ const seedData = async () => {
 
     // Create blogs using factory
     console.log('📝 Creating blog posts...');
-    const blogs = BlogFactory.createMany(createdUsers, 50); // Create 50 blogs
+    const blogs = BlogFactory.createMany(createdUsers, 50);
     const createdBlogs = await Blog.insertMany(blogs);
     console.log(`✅ Created ${createdBlogs.length} blog posts`);
 
