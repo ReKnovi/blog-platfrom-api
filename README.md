@@ -221,6 +221,10 @@ curl -X PUT http://localhost:5000/api/v1/blogs/BLOG_ID \
     "description": "Updated description..."
   }'
 ```
+**Advanced filtering with multiple parameters:**
+```bash
+curl "http://localhost:5000/api/v1/blogs?title=node&tags=javascript,backend&page=2&limit=5&sort=asc"
+```
 
 ### Comments
 
