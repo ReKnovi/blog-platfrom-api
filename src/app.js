@@ -5,6 +5,7 @@ const commentRoutes = require('./routes/commentRoutes');
 const authRoutes = require('./routes/authRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 const rssRoutes = require('./routes/rssRoutes');
+const limiter = require('./middlewares/rateLimiter');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -14,7 +15,7 @@ app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:3000',
   credentials: true
 }));
-
+app.use(limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
