@@ -1,4 +1,5 @@
 const Blog = require('../models/Blog');
+const { invalidateRSSCache } = require('../middlewares/rssMiddleware');
 const { validationResult } = require('express-validator');
 
 exports.createBlog = async (req, res, next) => {
@@ -26,7 +27,8 @@ exports.createBlog = async (req, res, next) => {
       tags: tags ? tags.map(tag => tag.trim()) : [],
       user: req.user._id 
     });
-
+    
+     invalidateRSSCache(req, res, () => {});
     res.status(201).json({
       success: true,
       data: blog
